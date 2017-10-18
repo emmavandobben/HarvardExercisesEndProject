@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+
+<!--declaring language :  https://www.w3.org/International/questions/qa-lang-why --> 
+<html lang="en">
+    
+    <head>
+
+        <!-- declaring character encoding : https://developer.mozilla.org/en-US/docs/Web/HTML/Element/meta -->
+        <meta charset="utf-8"/>
+        <!-- A <meta> viewport element gives the browser instructions on how to control the page's dimensions and scalin: https://www.w3schools.com/css/css_rwd_viewport.asp --> 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <link href = "css.css" rel = "stylesheet"/>
+        
+        <!-- documentation at http://getbootstrap.com/, alternative themes at https://www.bootstrapcdn.com/bootswatch/ -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet"/>
+
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet"/>
+
+        <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+        <title> Who Brings What {% block title %}{% endblock %}</title>
+    
+    </head>
+    <body>
+        
+        <!-- http://stackoverflow.com/questions/28047651/why-wrap-div-class-container-about-nav-elements-->
+        <div class="container">
+
+            <!-- navigation bar on top of the page : https://www.w3schools.com/bootstrap/bootstrap_navbar.asp -->
+            <nav class="navbar navbar-default">
+                <!-- .container has one fixed width for each screen size in bootstrap (xs,sm,md,lg); .container-fluid expands to fill the available width : http://stackoverflow.com/questions/22262311/container-fluid-vs-container -->
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#navbar" data-toggle="collapse" type="button">
+                            <!-- screen readers only -->
+                            <span class="sr-only">Toggle navigation</span>
+                            <!-- a bar with icons (a house, a letter etc)-->
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="{{ url_for('index') }}"><span class="blue">Who</span><span class="red">Brings</span><span class="yellow">What</span></a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="navbar">
+                        {% if session.user_id %}
+                            <ul class="nav navbar-nav">
+                                <li><a href="{{ url_for('newParty') }}">New Party</a></li>
+                                <li><a href="{{ url_for('myParties') }}">My Parties</a></li>
+                            </ul>
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                            </ul>
+                        {% else %}
+                            <ul class="nav navbar-nav navbar-right">
+                                <li><a href="{{ url_for('register') }}">Register</a></li>
+                                <li><a href="{{ url_for('login') }}">Log In</a></li>
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </nav>
+
+            {% if get_flashed_messages() %}
+                <header>
+                    <div class="alert alert-info" role="alert">
+                        {{ get_flashed_messages() | join(" ") }}
+                    </div>
+                </header>
+            {% endif %}
+
+            <main>
+                {% block main %}{% endblock %}
+            </main>
+            
+        </div>
+
+    </body>
+
+</html>
